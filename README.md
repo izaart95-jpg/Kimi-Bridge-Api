@@ -20,6 +20,9 @@ All requests must include the following header:
 ```http
 Authorization: Bearer Waguri
 ```
+For Example 
+curl http://localhost:3000/models -H "Authorization: Bearer Waguri"
+
 You can change apiKey in main.js/beta.js at Around line 65
 
 ---
@@ -122,4 +125,5 @@ The server maintains an internal `globalState`:
 ### Multimodal / Agent Support
 - Automatically filters and joins text from array-based content fields.
 - Safe to use with complex Agent frameworks that send structured content.
+
 
