@@ -17,7 +17,7 @@ def connect_encode(obj: dict) -> bytes:
 
 # ================= START NEW CHAT =================
 def start_new_chat(prompt: str = "Hello"):
-    token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWNlbnRlciIsImV4cCI6MTc3MTIzNTc4MSwiaWF0IjoxNzY4NjQzNzgxLCJqdGkiOiJkNWxscGhlbXU2czd0YXM2M2NmMCIsInR5cCI6ImFjY2VzcyIsImFwcF9pZCI6ImtpbWkiLCJzdWIiOiJkNHQ4ajNlczFyaDFvbGpvdjdnMCIsInNwYWNlX2lkIjoiZDR0OGozNnMxcmgxb2xqb3V2N2ciLCJhYnN0cmFjdF91c2VyX2lkIjoiZDR0OGozNnMxcmgxb2xqb3V2NzAiLCJzc2lkIjoiMTczMTQ2OTEyOTk4ODg0MTU3MiIsImRldmljZV9pZCI6Ijc1ODY5MTU1NTA2MjcwMTMxMzMiLCJyZWdpb24iOiJvdmVyc2VhcyIsIm1lbWJlcnNoaXAiOnsibGV2ZWwiOjEwfX0.zeuHfkX1zhFCq_l1phx5NLo3jUcZfh8x2urhx-9oox3uP04mUA_JBCqu83WQNoiD1az0cylAy5zVriB7SNVEZw"
+    token = ""
 
     payload = {
         "scenario": "SCENARIO_K2D5",
