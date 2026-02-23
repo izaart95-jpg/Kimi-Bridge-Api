@@ -4,7 +4,7 @@ const crypto = require("crypto");
 
 // ================= CONFIGURATION =================
 const PORT = 3000;
-const ACCESS_TOKEN = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWNlbnRlciIsImV4cCI6MTc3NDI1MDc3NSwiaWF0IjoxNzcxNjU4Nzc1LCJqdGkiOiJkNmNsczV2ZnRhZTY4NGw5dTFyMCIsInR5cCI6ImFjY2VzcyIsImFwcF9pZCI6ImtpbWkiLCJzdWIiOiJkNHQ4ajNlczFyaDFvbGpvdjdnMCIsInNwYWNlX2lkIjoiZDR0OGozNnMxcmgxb2xqb3V2N2ciLCJhYnN0cmFjdF91c2VyX2lkIjoiZDR0OGozNnMxcmgxb2xqb3V2NzAiLCJzc2lkIjoiMTczMTQ2OTEyOTk4ODg0MTU3MiIsImRldmljZV9pZCI6Ijc1ODI1MjM4Nzc4NDczODkxOTciLCJyZWdpb24iOiJvdmVyc2VhcyIsIm1lbWJlcnNoaXAiOnsibGV2ZWwiOjEwfX0.xPnHXDOtIocDhiCsUrqbUVf2QDvN620i23wM5IRi_yTg8OuUESvfgPoZcqoHxxKtz8RdehtAlsEPlyKIYG96nw";
+const ACCESS_TOKEN = "";
 
 // IDE Instructions Configuration
 const IDE_INSTRUCTIONS = true; // Set to true to prepend critical instructions to every request
