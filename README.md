@@ -7,7 +7,7 @@ A lightweight Node.js proxy server that provides an OpenAI-compatible API interf
 ### Prerequisites
 - Node.js installed (v16+ recommended)
 - No external dependencies (uses native `http`/`https` modules)
-
+- Getting kimi-auth : Go to kimi.com log in open Dev tools Go to Applications click on cookies and copy value of kimi-auth Paste its value in ACCES_TOKEN
 ### Running the Server
 ```bash
 node main.js
@@ -122,3 +122,4 @@ The server maintains an internal `globalState`:
 ### Multimodal / Agent Support
 - Automatically filters and joins text from array-based content fields.
 - Safe to use with complex Agent frameworks that send structured content.
+
