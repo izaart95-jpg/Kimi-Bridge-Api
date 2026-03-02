@@ -1,3 +1,4 @@
+// IDE.js works best for cline kilo code ad open code not good with roo code
 const http = require("http");
 const https = require("https");
 const crypto = require("crypto");
