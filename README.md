@@ -20,10 +20,11 @@ All requests must include the following header:
 ```http
 Authorization: Bearer Waguri
 ```
-For Example 
+For example
+```bash
 curl http://localhost:3000/models -H "Authorization: Bearer Waguri"
-
-You can change apiKey in main.js/beta.js at Around line 65
+```
+You can change apiKey in main.js/IDE.js at Around line 65
 
 ---
 
