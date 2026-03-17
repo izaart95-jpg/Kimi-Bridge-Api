@@ -29,7 +29,7 @@ You can change apiKey in main.js/IDE.js at Around line 65
 ---
 
 ## Usage & WalkThrough
-### - [Walkthrough](https://youtu.be/GlWP-YYddZg)
+#### - [Walkthrough & Usage](https://youtu.be/GlWP-YYddZg)
 ---
 
 ## 📡 API Endpoints
