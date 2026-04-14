@@ -1,158 +1,166 @@
-# Kimi Proxy Bridge Documentation
+# Kimi Proxy Bridge
 
-A lightweight Node.js proxy server that provides an OpenAI-compatible API interface for Kimi AI.
+[![Node.js](https://img.shields.io/badge/Node.js-v16+-green.svg)](https://nodejs.org/)
+[![API](https://img.shields.io/badge/API-OpenAI%20Compatible-orange.svg)]()
 
-## 🚀 Getting Started
+A lightweight, production-ready Node.js proxy server that provides an OpenAI-compatible API interface for Kimi AI (kimi.ai). Zero external dependencies, supporting streaming responses, multimodal inputs, and conversation history management.
 
-### Prerequisites
-- Node.js installed (v16+ recommended)
-- No external dependencies (uses native `http`/`https` modules)
-- A valid [Kimi.ai](kimi.ai) account
-## 🔑 Obtaining Your Access Token
+## 📋 Table of Contents
 
-Before running the server, you must configure your Kimi access token:
-1. Navigate to kimi.ai and log in to your account
-2. Open **Developer Tools**:
-3. Navigate to the Application tab (or Storage in Firefox)
-4. In the left sidebar, expand Local Storage → https://kimi.ai
-5. Locate the key `access_token`
-6. Copy its value (a long JWT string starting with eyJ...)
-### Alternatively, via Console:
-```javascript
-// In the Console tab, type:
-localStorage.getItem('access_token')
-// Copy the returned string value
-```
-## ⚙️ Configuration
-Edit either `main.js` or `IDE.js` (whichever you're using) and set your access token:
-```javascript
-// Around line 10-15, replace with your actual token
-const ACCES_TOKEN = "";
-```
-### Running the Server
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
+- [Usage Examples](#usage-examples)
+- [Technical Details](#technical-details)
+- [Troubleshooting](#troubleshooting)
+
+## ✨ Features
+
+- **🔌 OpenAI-Compatible API** — Drop-in replacement for OpenAI chat completions endpoint
+- **⚡ Zero Dependencies** — Uses native Node.js `http`/`https` modules only
+- **🌊 Streaming Support** — Server-Sent Events (SSE) for real-time token streaming
+- **🖼️ Multimodal Support** — Handles both text and structured content arrays
+- **🧠 Extended Capabilities** — Deep thinking and web search functionality
+- **📚 Flexible History** — Toggle between stateful conversations and stateless requests
+- **🔄 Dynamic Model Switching** — Runtime model selection between K2.5 variants
+
+## 📦 Prerequisites
+
+- **Node.js**: Version 16.0 or higher recommended
+- **Kimi.ai Account**: Valid authentication credentials required
+- **Network Access**: Connectivity to kimi.ai services
+
+## 🚀 Installation
+
+1. **Clone or download** the repository
+2. **Configure authentication** (see Configuration section)
+3. **Start the server**:
+
 ```bash
 node main.js
 # or
 node IDE.js
 ```
-The server listens on **port 3000** by default.
-On startup, it automatically initializes a new chat session to generate a static Chat ID.
 
-### Authentication
-All requests must include the following header:
+The server listens on **port 3000** by default and automatically initializes a new chat session on startup.
+
+## 🔐 Configuration
+
+### Obtaining Your Access Token
+
+1. Navigate to [kimi.ai](https://kimi.ai) and log in to your account
+2. Open **Developer Tools** (`F12` or `Ctrl+Shift+I`)
+3. Navigate to **Application** tab (Chrome/Edge) or **Storage** (Firefox)
+4. In the left sidebar, expand **Local Storage** → `https://kimi.ai`
+5. Locate the `access_token` key and copy its value (JWT string starting with `eyJ...`)
+
+**Alternative Method via Console:**
+```javascript
+localStorage.getItem('access_token')
+```
+
+### Server Configuration
+
+Edit `main.js` or `IDE.js` (depending on your use case) and insert your token:
+
+```javascript
+// Configuration - Line ~10-15
+const ACCESS_TOKEN = "your-access-token-here";
+```
+
+### Authentication Header
+
+All API requests must include the Authorization header:
+
 ```http
 Authorization: Bearer Waguri
 ```
-Quick Smoke Test
+
+*Note: The API key can be customized in the configuration file (around line 65).*
+
+### Quick Connectivity Test
+
 ```bash
-curl http://localhost:3000/models -H "Authorization: Bearer Waguri"
+curl http://localhost:3000/models \
+  -H "Authorization: Bearer Waguri"
 ```
-You can change apiKey in main.js/IDE.js at Around line 65
+## 🎥 Walkthrough
 
----
+For detailed setup instructions and advanced usage scenarios, refer to the [video walkthrough](https://youtu.be/GlWP-YYddZg).
 
-## Usage & WalkThrough
-#### - [Walkthrough & Usage](https://youtu.be/GlWP-YYddZg)
----
+## 📡 API Reference
 
-## 📡 API Endpoints
+### 1. Chat Completions
 
-### 1. Chat Completions (OpenAI Compatible)
-**POST** `/v1/chat/completions`
+**Endpoint:** `POST /v1/chat/completions`
 
-cURL example:
-```bash
-curl -X POST http://localhost:3000/v1/chat/completions \
-  -H "Authorization: Bearer Waguri" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      { "role": "user", "content": "Hello! How are you?" }
-    ],
-    "model": "model",
-    "stream": false
-  }'
-  ```
-```bash
-curl -X POST http://localhost:3000/v1/chat/completions \
-  -H "Authorization: Bearer Waguri" \
-  -H "Content-Type: application/json" \
-  -N \
-  -d '{
-    "messages": [
-      { "role": "user", "content": "Tell me a short story" }
-    ],
-    "model": "model",
-    "stream": true
-  }'
-```
-```bash
-curl -X POST http://localhost:3000/v1/chat/completions \
-  -H "Authorization: Bearer Waguri" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      { "role": "user", "content": "Solve this complex math problem: 2x + 5 = 15" }
-    ],
-    "model": "model",
-    "deepThink": true,
-    "stream": false
-  }'
-```
-```bash
-curl -X POST http://localhost:3000/v1/chat/completions \
-  -H "Authorization: Bearer Waguri" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      { "role": "user", "content": "What are the latest news about AI?" }
-    ],
-    "model": "model",
-    "search": true,
-    "stream": false
-  }'
+Creates a chat completion for the provided messages. Compatible with OpenAI's chat completions specification.
+
+#### Request Headers
+| Header | Value |
+|--------|-------|
+| `Authorization` | `Bearer Waguri` |
+| `Content-Type` | `application/json` |
+
+#### Request Body
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `messages` | Array | Yes | Conversation history array |
+| `model` | String | Yes | Model identifier: `SCENARIO_K2D5` or `SCENARIO_K2D5_TURBO` |
+| `stream` | Boolean | No | Enable SSE streaming (default: `false`) |
+| `deepThink` | Boolean | No | Enable enhanced reasoning mode |
+| `search` | Boolean | No | Enable web search capabilities |
+
+#### Message Format
+```json
+{
+  "role": "user",
+  "content": "Your message here"
+}
 ```
 
-**Features:**
-- **Streaming**: Returns Server-Sent Events (SSE) in `data: {...}` format.
-- **Multimodal Support**: Handles `content` as a simple string or an array of objects (useful for Agents).
-  ```json
+**Multimodal Content Format:**
+```json
+{
+  "role": "user",
   "content": [
-    { "type": "text", "text": "Hello world" }
+    { "type": "text", "text": "Analyze this image" }
   ]
-  ```
-
-### 2. Manage History Mode
-**GET / POST** `/history`
-
-Control whether the server maintains conversation history or treats every message as a standalone turn.
-
-- **History: `false` (Default)**
-  - Behaves like `static.py`.
-  - Reuses a fixed `STATIC_CHAT_ID` and `STATIC_PARENT_MESSAGE_ID`.
-  - Every message branches from the original initialization point.
-  
-- **History: `true`**
-  - Behaves like `continue.py`.
-  - Automatically updates `lastMessageId` after every response.
-  - Maintains a continuous conversation context.
-
-**Usage:**
-```http
-POST /history
-Content-Type: application/json
-
-{ "enable": true }
+}
 ```
-*Or via GET:* `/history?enable=true`
 
-### 3. Start New Chat
-**POST** `/new`
+### 2. History Mode Management
 
-Forces the server to initialize a fresh chat session.
-- Generates new `Chat ID` and `Parent Message ID`.
-- Updates the **Static** IDs used for non-history mode.
-- Resets the **Global** IDs used for history mode.
+**Endpoint:** `GET /history` or `POST /history`
+
+Controls conversation context persistence.
+
+| Mode | Behavior |
+|------|----------|
+| `false` (Default) | Stateless mode. Uses static IDs; each request branches from initialization point |
+| `true` | Stateful mode. Maintains continuous conversation context with dynamic message IDs |
+
+**POST Example:**
+```bash
+curl -X POST http://localhost:3000/history \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{"enable": true}'
+```
+
+**GET Example:**
+```bash
+curl "http://localhost:3000/history?enable=true" \
+  -H "Authorization: Bearer Waguri"
+```
+
+### 3. Session Management
+
+**Endpoint:** `POST /new`
+
+Initializes a fresh chat session, generating new Chat ID and Parent Message ID. Resets both static and global state.
 
 **Response:**
 ```json
@@ -164,43 +172,120 @@ Forces the server to initialize a fresh chat session.
 ```
 
 ### 4. Model Management
-**GET** `/models`
-Lists available models: `SCENARIO_K2D5` (Kimi 2.5) and `SCENARIO_K2D5_TURBO`.
 
-cURL example:
-
+**List Available Models**
 ```bash
-curl -X GET http://localhost:3000/models \
-  -H "Authorization: Bearer Waguri"
-  ```
-**POST** `/models`
-Switch the active model scenario.
-
-cURL example:
-
-```bash
-curl -X POST http://localhost:3000/models \
-  -H "Authorization: Bearer Waguri" \
-  -H "Content-Type: application/json" \
-  -d '{"model": "SCENARIO_K2D5_TURBO"}'
+GET /models
 ```
 
----
+**Switch Active Model**
+```bash
+POST /models
+Content-Type: application/json
+
+{
+  "model": "SCENARIO_K2D5_TURBO"
+}
+```
+
+**Available Models:**
+- `SCENARIO_K2D5` — Kimi 2.5 Standard
+- `SCENARIO_K2D5_TURBO` — Kimi 2.5 Turbo (optimized for speed)
+
+## 💡 Usage Examples
+
+### Basic Completion (Non-Streaming)
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "Hello! How are you?" }
+    ],
+    "model": "SCENARIO_K2D5",
+    "stream": false
+  }'
+```
+
+### Streaming Response
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -N \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "Tell me a short story" }
+    ],
+    "model": "SCENARIO_K2D5",
+    "stream": true
+  }'
+```
+
+### Deep Thinking Mode
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "Solve this complex math problem: 2x + 5 = 15" }
+    ],
+    "model": "SCENARIO_K2D5",
+    "deepThink": true,
+    "stream": false
+  }'
+```
+
+### Web Search Enabled
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "What are the latest developments in AI?" }
+    ],
+    "model": "SCENARIO_K2D5",
+    "search": true,
+    "stream": false
+  }'
+```
 
 ## 🛠️ Technical Details
 
-### State Management
-The server maintains an internal `globalState`:
-- **Static IDs**: Created on startup or via `/new`. Used when history is **OFF**.
-- **Dynamic IDs**: Updated continuously when history is **ON**.
-- **Model**: Globally switched for all subsequent requests.
+### State Management Architecture
+
+The server maintains an internal `globalState` object:
+
+- **Static IDs**: Persistent identifiers created on startup or via `/new`. Used when `history: false`.
+- **Dynamic IDs**: Updated per-interaction when `history: true` to maintain conversation continuity.
+- **Model Context**: Globally switched for all subsequent requests when changed via `/models`.
 
 ### Error Handling
-- Returns standard OpenAI-style error objects.
-- Includes a global `uncaughtException` handler to prevent server crashes on malformed payloads.
 
-### Multimodal / Agent Support
-- Automatically filters and joins text from array-based content fields.
-- Safe to use with complex Agent frameworks that send structured content.
+- Returns standardized OpenAI-format error objects
+- Global `uncaughtException` handler prevents server crashes from malformed payloads
+- Automatic retry logic for transient network failures
+
+### Content Processing
+
+- **Text Normalization**: Automatically extracts text from array-based content structures
+- **Agent Compatibility**: Safe for integration with LangChain, AutoGen, and other agent frameworks
+- **Encoding**: UTF-8 support for international character sets
 
 
+## 🐛 Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `401 Unauthorized` | Verify `access_token` is valid and not expired; regenerate from kimi.ai |
+| `Connection refused` | Ensure Node.js server is running on port 3000 (or configured port) |
+| Empty responses | Check that `Authorization` header exactly matches `Bearer Waguri` |
+| Streaming not working | Ensure client supports SSE and `-N` flag is used in curl |
+| Model errors | Verify model identifier is exactly `SCENARIO_K2D5` or `SCENARIO_K2D5_TURBO` |
+
+---
+
+**Note**: This is an unofficial community project and is not affiliated with Moonshot AI or kimi.ai.
