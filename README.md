@@ -1,16 +1,39 @@
-# Kimi Proxy Server Documentation
+# Kimi Proxy Bridge Documentation
 
-A lightweight Node.js proxy server that provides an OpenAI-compatible API interface for Kimi AI (Moonshot).
+A lightweight Node.js proxy server that provides an OpenAI-compatible API interface for Kimi AI.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js installed (v16+ recommended)
 - No external dependencies (uses native `http`/`https` modules)
-- Getting kimi-auth : Go to kimi.com log in open Dev tools Go to Applications click on cookies and copy value of kimi-auth Paste its value in ACCES_TOKEN
+- A valid [Kimi.ai](kimi.ai) account
+## 🔑 Obtaining Your Access Token
+
+Before running the server, you must configure your Kimi access token:
+1. Navigate to kimi.ai and log in to your account
+2. Open **Developer Tools**:
+3. Navigate to the Application tab (or Storage in Firefox)
+4. In the left sidebar, expand Local Storage → https://kimi.ai
+5. Locate the key `access_token`
+6. Copy its value (a long JWT string starting with eyJ...)
+### Alternatively, via Console:
+```javascript
+// In the Console tab, type:
+localStorage.getItem('access_token')
+// Copy the returned string value
+```
+## ⚙️ Configuration
+Edit either `main.js` or `IDE.js` (whichever you're using) and set your access token:
+```javascript
+// Around line 10-15, replace with your actual token
+const ACCES_TOKEN = "";
+```
 ### Running the Server
 ```bash
 node main.js
+# or
+node IDE.js
 ```
 The server listens on **port 3000** by default.
 On startup, it automatically initializes a new chat session to generate a static Chat ID.
@@ -20,7 +43,7 @@ All requests must include the following header:
 ```http
 Authorization: Bearer Waguri
 ```
-For example
+Quick Smoke Test
 ```bash
 curl http://localhost:3000/models -H "Authorization: Bearer Waguri"
 ```
@@ -37,18 +60,57 @@ You can change apiKey in main.js/IDE.js at Around line 65
 ### 1. Chat Completions (OpenAI Compatible)
 **POST** `/v1/chat/completions`
 
-Streamed responses compatible with OpenAI clients.
-
-**Request Body:**
-```json
-{
-  "messages": [
-    { "role": "user", "content": "Hello!" }
-  ],
-  "model": "kimi",
-  "deepThink": false,  // Optional: Enable deep thinking (default: false)
-  "search": false      // Optional: Enable web search (default: false)
-}
+cURL example:
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "Hello! How are you?" }
+    ],
+    "model": "model",
+    "stream": false
+  }'
+  ```
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -N \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "Tell me a short story" }
+    ],
+    "model": "model",
+    "stream": true
+  }'
+```
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "Solve this complex math problem: 2x + 5 = 15" }
+    ],
+    "model": "model",
+    "deepThink": true,
+    "stream": false
+  }'
+```
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      { "role": "user", "content": "What are the latest news about AI?" }
+    ],
+    "model": "model",
+    "search": true,
+    "stream": false
+  }'
 ```
 
 **Features:**
@@ -105,12 +167,22 @@ Forces the server to initialize a fresh chat session.
 **GET** `/models`
 Lists available models: `SCENARIO_K2D5` (Kimi 2.5) and `SCENARIO_K2D5_TURBO`.
 
+cURL example:
+
+```bash
+curl -X GET http://localhost:3000/models \
+  -H "Authorization: Bearer Waguri"
+  ```
 **POST** `/models`
 Switch the active model scenario.
 
-**Request:**
-```json
-{ "model": "SCENARIO_K2D5_TURBO" }
+cURL example:
+
+```bash
+curl -X POST http://localhost:3000/models \
+  -H "Authorization: Bearer Waguri" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "SCENARIO_K2D5_TURBO"}'
 ```
 
 ---
